@@ -3,9 +3,12 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+*.ipynb
+
 # C extensions
 *.so
 
+data/
 # Distribution / packaging
 .Python
 build/

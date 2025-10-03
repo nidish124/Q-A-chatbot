@@ -29,7 +29,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
 def init_session_state():
     """Initialize session state variables"""
     if 'rag_system' not in st.session_state:
@@ -45,29 +44,35 @@ def initialize_rag():
     try:
         # Initialize components
         llm = config.get_llm()
-        doc_processor = DocumentProcessor(
-            chunk_size=config.CHUNK_SIZE,
-            chunk_overlap=config.CHUNK_OVERLAP
-        )
+
+        #doc_processor = DocumentProcessor(
+        #    chunk_size=config.CHUNK_SIZE,
+        #    chunk_overlap=config.CHUNK_OVERLAP
+        #)
+
         vector_store = VectorStore()
         
         # Process documents
-        documents = doc_processor.load_files("data")
+        #documents = doc_processor.load_files("data")
         
         # Create vector store
-        vector_store.create_vectorestore(documents)
+        #vector_store.create_vectorestore(documents)
+        
+        #load vectorstore
+        vector_store.load_vectorestore("artifact")
         
         # Build graph
         graph_builder = GraphBuilder(
-            retriever=vector_store.get_retriever(),
+            retriever=vector_store.retriever,
             llm=llm, 
         )
+        
         graph_builder.build()
         
-        return graph_builder, len(documents)
+        return graph_builder
     except Exception as e:
         st.error(f"Failed to initialize: {str(e)}")
-        return None, 0
+        return None
 
 def main():
     """Main application"""
@@ -79,11 +84,11 @@ def main():
     # Initialize system
     if not st.session_state.initialized:
         with st.spinner("Loading system..."):
-            rag_system, num_chunks = initialize_rag()
+            rag_system= initialize_rag()
             if rag_system:
                 st.session_state.rag_system = rag_system
                 st.session_state.initialized = True
-                st.success(f"✅ System ready! ({num_chunks} document chunks loaded)")
+                st.success(f"✅ System ready! ")
     
     st.markdown("---")
     
