@@ -16,7 +16,7 @@ class VectorStore:
 
     def load_vectorestore(self, path):
         self.load_vect = FAISS.load_local(path, self.embedding, allow_dangerous_deserialization=True)
-        self.retriever = self.load_vect.as_retriever(search_kwarg = {"k":self.MAX_DOC_RETIVAL}, search_type = "mmr")
+        self.retriever = self.load_vect.as_retriever(search_kwargs = {"k":self.MAX_DOC_RETIVAL}, search_type = "mmr")
 
     def get_retriever(self):
         if self.retriever == None:

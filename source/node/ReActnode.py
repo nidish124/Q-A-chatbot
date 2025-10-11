@@ -26,13 +26,13 @@ class RAGNodes:
     def Build_agent_tools(self):
         def retriver_toll_func(query: str) -> str:
             docs: List[Document] = self.retriever.invoke(query)
-            if not docs:  
+            if not docs:
                 return "No documents found."
             merged = []
             for i, d in enumerate(docs[:8], start=1):
                 meta = d.metadata if hasattr(d, "metadata") else {}
                 title = meta.get("title") or meta.get("source") or f"doc_{i}"
-                merged.append(f"[{i}] {title}\n{d.page_content}")
+                merged.append(f"[{i}] {title}\n{d.page_content.strip()}")
             return "\n\n".join(merged)
 
         wiki = WikipediaQueryRun(
